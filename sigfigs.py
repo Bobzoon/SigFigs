@@ -2,9 +2,25 @@ from warnings import warn
 class Exact:
     """Exact quantities such as those in defined quantities or resulting from the counting of discrete objects, 
     are treated as having infinite significant figures"""
-
     def __init__(self,value):
-        self.value=float(value)
+        if type(value)==Exact:
+            self.value=value.value
+        else:
+            self.value=float(value)
+    def __add__(self, addition):
+        return Exact(self.value+Exact(addition).value)
+    __radd__=__add__
+    def __sub__(self, subtrahend):
+        return Exact(self.value-Exact(subtrahend).value)
+    __rsub__=__sub__
+    def __mul__(self,multiplicand):
+        return Exact(self.value*Exact(multiplicand).value)
+    __rmul__=__mul__
+    def __truediv__(self,divisor):
+        return Exact(self.value/Exact(divisor).value)
+    __rtruediv__=__truediv__
+    def __str__(self):
+        return str(self.value)
 
 class Sigfig:
     """
