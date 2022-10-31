@@ -94,7 +94,8 @@ class Sigfig:
             if type(value)==float:
                 warn("WARNING: Significant figures that are trailing zeroes right of the decimal point in floats are lost.")
             self.valuestring=f'{value}'.lower()
-            self.valuestring0,self.valuestring1 = self.valuestring.split('.')[0],self.valuestring.split('.')[1]
+            self.valuestring0=self.valuestring.split('.')[0]
+            self.valuestring1=self.valuestring.split('.')[1] if '.' in self.valuestring else None
             self.sigfigs=sigfigs if sigfigs else self.findsigfigs()
             self.postdecimalsig=self.findpostdecimal()               
             self.additionflag=False
