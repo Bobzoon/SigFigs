@@ -85,7 +85,6 @@ class Sigfig:
             self.valuestring=value.valuestring
             self.sigfigs=value.sigfigs
             self.postdecimalsig=value.postdecimalsig
-            self.additionflag=value.additionflag
         else:
             try:
                 self.value=float(value)
@@ -98,7 +97,6 @@ class Sigfig:
             self.valuestring1=self.valuestring.split('.')[1] if '.' in self.valuestring else None
             self.sigfigs=sigfigs if sigfigs else self.findsigfigs()
             self.postdecimalsig=self.findpostdecimal()               
-            self.additionflag=False
 
     def __add__(self,addition):
         """When two numbers are added, the result has enough significant digits such that 
@@ -119,7 +117,6 @@ class Sigfig:
             postdecimal=f".{result.valuestring1[:result.postdecimalsig]}"
             sigfigtest=predecimal+postdecimal if result.postdecimalsig else predecimal
             result.sigfigs=Sigfig(sigfigtest).findsigfigs()
-            result.additionflag=True
             return result
     __radd__=__add__
         
@@ -141,7 +138,6 @@ class Sigfig:
             postdecimal=f".{result.valuestring1[:result.postdecimalsig]}"
             sigfigtest=predecimal+postdecimal if result.postdecimalsig else predecimal
             result.sigfigs=Sigfig(sigfigtest).findsigfigs()
-            result.additionflag=True
             return result
     __rsub__=__sub__
     
@@ -158,7 +154,6 @@ class Sigfig:
             result=Sigfig(f'{self.value*sigmul.value}')
             result.sigfigs=min([self.sigfigs,sigmul.sigfigs])
             result.postdecimalsig=result.findpostdecimal() if '.' in result.valuestring else 0
-            result.additionflag=False
             return result
     __rmul__=__mul__
     
@@ -174,7 +169,6 @@ class Sigfig:
             result=Sigfig(f'{self.value/sigdiv.value}')
             result.sigfigs=min([self.sigfigs,sigdiv.sigfigs])
             result.postdecimalsig=result.findpostdecimal() if '.' in result.valuestring else 0
-            result.additionflag=False
             return result
     __rtruediv__=__truediv__
 
@@ -182,7 +176,4 @@ class Sigfig:
         return f"Sigfig('{self.value}', sigfigs={self.sigfigs})"
     
     def __str__(self):
-        if self.additionflag:
-            return f"{self.value:.{self.sigfigs-1}e}"
-        elif not self.additionflag:
-            return f"{self.value:.{self.sigfigs-1}e}"
+        return f"{self.value:.{self.sigfigs-1}e}"
